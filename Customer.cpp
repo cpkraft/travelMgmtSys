@@ -1,10 +1,3 @@
-#include <iostream>
-#include <string>
+#include "Customer.h"
 
 using namespace std;
-
-class Customer
-{
-   public:
-      string name;
-};

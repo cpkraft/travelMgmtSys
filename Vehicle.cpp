@@ -1,7 +1,3 @@
-#include <iostream>
+#include "Vehicle.h"
 
 using namespace std;
-
-class Vehicle
-{
-};
