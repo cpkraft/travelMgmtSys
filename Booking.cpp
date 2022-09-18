@@ -1,5 +1,25 @@
 #include "Booking.h"
 
+// DEPRICATED: kept around for old tests - TODO: update old tests
+Booking::Booking(Date depDate, Date arrDate)
+{
+   customer = Customer("No Name"); // invalid name
+   vehicle = Vehicle(0); // invalid vehicle
+   departureDate = depDate;
+   arrivalDate = arrDate;
+}
+
+Booking::Booking(Customer theCustomer,
+         Vehicle theVehicle,
+         Date depDate,
+         Date arrDate)
+{
+   customer = theCustomer;
+   vehicle = theVehicle;
+   departureDate = depDate;
+   arrivalDate = arrDate;
+}
+
 std::ostream& operator<<(std::ostream& out, const Date& date)
 {
    out << date.month << "." << date.day << "." << date.year << std::endl;

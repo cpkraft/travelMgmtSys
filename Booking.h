@@ -1,6 +1,11 @@
+#pragma once
+
 #include <cstdint>
 #include <iostream>
 #include <tuple>
+
+#include "Customer.h"
+#include "Vehicle.h"
 
 struct Date
 {
@@ -32,11 +37,17 @@ std::istream& operator>>(std::istream& in, Date& date);
 class Booking
 {
    public:
-      Booking(Date depDate, Date arrDate) { departureDate = depDate; arrivalDate = arrDate; }
+      Booking(Date depDate, Date arrDate);  // DEPRICATED: kept around for old tests - TODO: update old tests
+      Booking(Customer theCustomer,
+              Vehicle theVehicle,
+              Date depDate,
+              Date arrDate);
       Date getDepartureDate() { return departureDate; }
       Date getArrivalDate() { return arrivalDate; }
 
    private:
+      Customer customer;
+      Vehicle vehicle;
       Date departureDate;
       Date arrivalDate;
 };

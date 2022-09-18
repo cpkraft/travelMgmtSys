@@ -50,12 +50,23 @@ void testBookingDates()
    assert(booking.getArrivalDate() == arrivalDate);
 }
 
+// like the idea of getting all the dependencies for booking first, then passing all to booking container
+void testBookingDetails()
+{
+   Booking booking(Customer("Jeff"), Vehicle(101), Date(1,11,1111), Date(2,22,2222));
+   // TODO: next is new test to take the booking and write to booking file
+   //  refactor idea later: have file name be <customer name>-<departure date>-<arrival date>
+}
+
 // ----- Requirements ----- //
 // Take in customer information
 // Take in booking choices
 // Show booking results
 // Take in booking confirmation
 // Show bill and print to file
+// Improvements
+//  have a container of available vehicles and perhaps drivers too to pull from if there are any available
+//   if not can return there are no availabilities on that reservation date/time, please enter a different date/time
 main()
 {
    // TODO: make sure to pass dependencies
@@ -70,4 +81,5 @@ main()
    testVehicleNumber();
    testCustomerName();
    testBookingDates();
+   testBookingDetails();
 }
