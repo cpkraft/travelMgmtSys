@@ -42,8 +42,10 @@ class Booking
               Vehicle theVehicle,
               Date depDate,
               Date arrDate);
-      Date getDepartureDate() { return departureDate; }
-      Date getArrivalDate() { return arrivalDate; }
+      Customer getCustomer() const { return customer; }
+      Vehicle getVehicle() const { return vehicle; }
+      Date getDepartureDate() const { return departureDate; }
+      Date getArrivalDate() const { return arrivalDate; }
 
    private:
       Customer customer;

@@ -3,10 +3,12 @@
 #include "Booking.h"
 
 #include <iostream>
+#include <fstream>
 #include <cassert>
 #include <cstdint>
+#include <utility>
 
-void testVehicleNumber()
+Vehicle testVehicleNumber()
 {
    uint32_t num = 101;
    std::cout << "Enter vehicle number: " << std::endl;
@@ -18,9 +20,10 @@ void testVehicleNumber()
    std::cout << "you entered: " << num << std::endl;
    Vehicle vehicle(num);
    assert(vehicle.getNumber() == num);
+   return vehicle;
 }
 
-void testCustomerName()
+Customer testCustomerName()
 {
    std::string name;
    std::cout << "Enter customer name: " << std::endl;
@@ -28,10 +31,11 @@ void testCustomerName()
    std::cout << "you entered: " << name << std::endl;
    Customer customer(name);
    assert(customer.getName() == name);
+   return customer;
 }
 
 // Booking inputs... date, time, origin, destination
-void testBookingDates()
+std::pair<Date, Date> testBookingDates()
 {
    Date departureDate;
    std::cout << "Enter date of departure (e.g. 03..16..2023)... " << std::endl;
@@ -48,14 +52,32 @@ void testBookingDates()
    Booking booking(departureDate, arrivalDate);
    assert(booking.getDepartureDate() == departureDate);
    assert(booking.getArrivalDate() == arrivalDate);
+   return std::make_pair(departureDate, arrivalDate);
 }
 
-// like the idea of getting all the dependencies for booking first, then passing all to booking container
-void testBookingDetails()
+void writeBookingToFile(const Booking& booking)
 {
-   Booking booking(Customer("Jeff"), Vehicle(101), Date(1,11,1111), Date(2,22,2222));
-   // TODO: next is new test to take the booking and write to booking file
-   //  refactor idea later: have file name be <customer name>-<departure date>-<arrival date>
+   std::cout << "Generating booking report..." << std::endl;
+   std::string filename = "booking.txt";
+   std::ofstream outFile(filename);
+   outFile << "Customer: " << booking.getCustomer().getName() << "\n";
+   outFile << "Vehicle #: " << booking.getVehicle().getNumber() << "\n";
+   outFile << "Departure Date: " << booking.getDepartureDate();
+   outFile << "Arrival Date: " << booking.getArrivalDate();
+   outFile.close();
+   std::cout << filename << std::endl;
+}
+
+// TODO: write test to read in the file output and check each line ***
+
+// like the idea of getting all the dependencies for booking first, then passing all to booking container
+//  refactor idea later: have file name be <customer name>-<departure date>-<arrival date>
+Booking testBookingDetails(const Customer& customer,
+                           const Vehicle& vehicle,
+                           const Date& depart,
+                           const Date& arrive)
+{
+   return Booking(customer, vehicle, depart, arrive);
 }
 
 // ----- Requirements ----- //
@@ -78,8 +100,9 @@ main()
    // Dependency Inversion
    std::cout << "----- TMS: program start -----\n" << std::endl;
 
-   testVehicleNumber();
-   testCustomerName();
-   testBookingDates();
-   testBookingDetails();
+   Vehicle vehicle = testVehicleNumber();
+   Customer customer = testCustomerName();
+   std::pair<Date, Date> dates = testBookingDates();
+   Booking booking = testBookingDetails(customer, vehicle, dates.first, dates.second);
+   writeBookingToFile(booking);
 }
