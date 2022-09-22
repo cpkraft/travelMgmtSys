@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <iostream>
 #include <tuple>
+#include <string>
 
 #include "Customer.h"
 #include "Vehicle.h"
@@ -27,6 +28,11 @@ struct Date
    bool operator==(const Date& rhs) const
    {
       return std::tie(year, month, day) == std::tie(rhs.year, rhs.month, rhs.day);
+   }
+
+   std::string toString()
+   {
+      return std::to_string(month) + "." + std::to_string(day) + "." + std::to_string(year);
    }
 };
 

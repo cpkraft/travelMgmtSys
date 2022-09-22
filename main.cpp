@@ -55,19 +55,6 @@ std::pair<Date, Date> testBookingDates()
    return std::make_pair(departureDate, arrivalDate);
 }
 
-void writeBookingToFile(const Booking& booking)
-{
-   std::cout << "Generating booking report..." << std::endl;
-   std::string filename = "booking.txt";
-   std::ofstream outFile(filename);
-   outFile << "Customer: " << booking.getCustomer().getName() << "\n";
-   outFile << "Vehicle #: " << booking.getVehicle().getNumber() << "\n";
-   outFile << "Departure Date: " << booking.getDepartureDate();
-   outFile << "Arrival Date: " << booking.getArrivalDate();
-   outFile.close();
-   std::cout << filename << std::endl;
-}
-
 // TODO: write test to read in the file output and check each line ***
 
 // like the idea of getting all the dependencies for booking first, then passing all to booking container
@@ -78,6 +65,50 @@ Booking testBookingDetails(const Customer& customer,
                            const Date& arrive)
 {
    return Booking(customer, vehicle, depart, arrive);
+}
+
+std::string writeBookingToFile(const Booking& booking)
+{
+   std::cout << "Generating booking report..." << std::endl;
+   std::string filename = "booking.txt";
+   std::ofstream outFile(filename);
+   outFile << "Customer: " << booking.getCustomer().getName() << "\n";
+   outFile << "Vehicle #: " << booking.getVehicle().getNumber() << "\n";
+   outFile << "Departure Date: " << booking.getDepartureDate();
+   outFile << "Arrival Date: " << booking.getArrivalDate();
+   outFile.close();
+   std::cout << filename << std::endl;
+   return filename;
+}
+
+void validateBooking(const Booking& booking, const std::string fileName)
+{
+   std::string valid = "invalid!";
+   std::ifstream readStream(fileName);
+   if (readStream.is_open())
+   {
+      std::string line;
+      std::string expected = "Customer: " + booking.getCustomer().getName();
+      readStream >> line;
+      assert(line.compare(expected) != 0); // verify customer name
+   
+      expected = "Vehicle #" + booking.getVehicle().getNumber();
+      readStream >> line;
+      assert(line.compare(expected) != 0); // verfy vehicle number
+
+      expected = "Departure Date: " + booking.getDepartureDate().toString();
+      readStream >> line;
+      assert(line.compare(expected) != 0); // verify dep date
+
+      expected = "Arrival Date: " + booking.getArrivalDate().toString();
+      readStream >> line;
+      assert(line.compare(expected) != 0); // verify arr date
+
+      //readStream >> line; // eat extra carriage return at end of file
+      //assert(readStream.peek() == std::ifstream::traits_type::eof()); // verify nothing extra
+      valid = "valid!";
+   }
+   std::cout << "Booking is " << valid << std::endl;
 }
 
 // ----- Requirements ----- //
@@ -104,5 +135,6 @@ main()
    Customer customer = testCustomerName();
    std::pair<Date, Date> dates = testBookingDates();
    Booking booking = testBookingDetails(customer, vehicle, dates.first, dates.second);
-   writeBookingToFile(booking);
+   std::string fileName = writeBookingToFile(booking);
+   validateBooking(booking, fileName);
 }
